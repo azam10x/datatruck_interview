@@ -1,0 +1,58 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+*.pyo
+db.sqlite3
+db.sqlite3-journal
+
+# Test database
+test.db
+test.db-journal
+
+# Media and Static Files
+/staticfiles/
+/media/
+
+# Local environment settings
+.env
+*.env
+
+# Virtual environments
+venv/
+ENV/
+.venv/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS specific
+.DS_Store
+*.icloud
+
+# Windows specific
+Thumbs.db
+desktop.ini
+
+# Node modules (if applicable, e.g., for frontend)
+node_modules/
+npm-debug.log*
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Pytest
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+dmypy.json
