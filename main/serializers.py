@@ -39,6 +39,7 @@ class BookSerializer:
             "author": obj.author,
             "publication_date": obj.publication_date.isoformat(),
             "available": obj.available,
+            "rating": obj.rating,
         }
 
     def is_valid(self):
@@ -70,12 +71,15 @@ class BookSerializer:
         for field in required_fields:
             if field not in data:
                 errors[field] = "This field is required."
-
+        
         if "publication_date" in data:
             try:
                 datetime.strptime(data["publication_date"], "%Y-%m-%d")
             except (ValueError, TypeError):
                 errors["publication_date"] = "Invalid date format. Use 'YYYY-MM-DD'."
+
+        if "author" in data and isinstance(data["author"], str) and data["author"].strip() == "":
+            errors["author"] = "Author cannot be empty."
 
         if "available" in data and not isinstance(data["available"], bool):
             errors["available"] = "Must be a boolean."

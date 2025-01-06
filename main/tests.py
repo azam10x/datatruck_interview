@@ -13,6 +13,7 @@ class BookSerializerTest(TestCase):
             author="Test Author",
             publication_date=date(2023, 1, 1),
             available=True,
+            rating=4.0
         )
 
     def test_to_representation_single(self):
@@ -24,6 +25,7 @@ class BookSerializerTest(TestCase):
             "author": "Test Author",
             "publication_date": "2023-01-01",
             "available": True,
+            "rating": 4.0
         }
         self.assertEqual(data, expected_data)
 
@@ -33,6 +35,7 @@ class BookSerializerTest(TestCase):
             author="Another Author",
             publication_date=date(2022, 12, 31),
             available=False,
+            rating=3.5
         )
         serializer = BookSerializer(instance=Book.objects.all(), many=True)
         data = serializer.to_representation()
@@ -43,12 +46,14 @@ class BookSerializerTest(TestCase):
                 "author": "Test Author",
                 "publication_date": "2023-01-01",
                 "available": True,
+                "rating": 4.0
             },
             {
                 "title": "Another Book",
                 "author": "Another Author",
                 "publication_date": "2022-12-31",
                 "available": False,
+                "rating": 3.5
             },
         ]
         self.assertEqual(data, expected_data)
@@ -59,6 +64,7 @@ class BookSerializerTest(TestCase):
             "author": "Valid Author",
             "publication_date": "2023-01-01",
             "available": True,
+            "rating": 4.5
         }
         serializer = BookSerializer(data=valid_data)
         self.assertTrue(serializer.is_valid())
@@ -99,6 +105,18 @@ class BookSerializerTest(TestCase):
         self.assertEqual(new_book.title, "New Book")
         self.assertEqual(new_book.author, "New Author")
 
+    def test_save_book_with_empty_author(self):
+        invalid_data = {
+            "title": "Book Without Author",
+            "author": "  ",
+            "publication_date": "2023-01-01",
+            "available": True,
+        }
+        book = BookSerializer(data=invalid_data)
+        self.assertFalse(book.is_valid())
+        self.assertIn("author", book.errors)
+        self.assertEqual(book.errors["author"], "Author cannot be empty.")
+
     def test_save_update(self):
         update_data = {
             "title": "Updated Book",
@@ -124,19 +142,22 @@ class BookViewsTest(TestCase):
             title="Book One",
             author="Author A",
             publication_date=date(2021, 1, 1),
-            available=True
+            available=True,
+            rating=4.5
         )
         cls.book2 = Book.objects.create(
             title="Book Two",
             author="Author B",
             publication_date=date(2022, 6, 15),
-            available=False
+            available=False,
+            rating=5
         )
         cls.book3 = Book.objects.create(
             title="Another Book",
             author="Author A",
             publication_date=date(2021, 5, 20),
-            available=True
+            available=True,
+            rating=3.5
         )
 
     def test_get_books_list(self):
